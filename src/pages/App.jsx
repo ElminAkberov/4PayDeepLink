@@ -5,13 +5,28 @@ const App = () => {
   const [isRealMobile, setIsRealMobile] = React.useState(false);
 
   React.useEffect(() => {
-    const checkScreenSize = () => {
-      const mobile =
+    const checkDevice = () => {
+      const userAgentMobile =
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
-        ) && navigator.maxTouchPoints > 1;
+        );
+
+      const isTouchCapable = navigator.maxTouchPoints > 1;
+      const isNotEmulator =
+        !navigator.webdriver &&
+        Math.abs(window.outerWidth - window.innerWidth) < 100;
+      const isLikelyMobileDevice =
+        typeof window.orientation !== "undefined" || window.innerWidth < 768;
+
+      const mobile =
+        userAgentMobile &&
+        isTouchCapable &&
+        isNotEmulator &&
+        isLikelyMobileDevice;
+
       const screenWidth = window.innerWidth;
       setIsRealMobile(mobile);
+
       if (screenWidth < 1024 && !mobile) {
         setShowBlackScreen(true);
       } else {
@@ -19,10 +34,10 @@ const App = () => {
       }
     };
 
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
     return () => {
-      window.removeEventListener("resize", checkScreenSize);
+      window.removeEventListener("resize", checkDevice);
     };
   }, []);
 
@@ -40,7 +55,7 @@ const App = () => {
   }
 
   return (
-    <menu className="bg-[#1B2332] comfortaa text-white w-full max-h-screen h-[100vh] flex flex-col items-center justify-center relative overflow-hidden  gap-6">
+    <menu className="bg-[#1B2332] comfortaa text-white w-full max-h-screen h-[100vh] flex flex-col items-center justify-center relative overflow-hidden gap-6">
       <h2 className="text-5xl text-center">
         <span>4</span>Pay <sup className="text-[10px]">&copy;</sup>
       </h2>
