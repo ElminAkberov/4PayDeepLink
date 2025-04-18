@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.satoshi {
+  font-family: "Satoshi", sans-serif !important;
+}
+.comfortaa {
+  font-family: "Comfortaa", serif;
+  font-optical-sizing: auto;
+}
