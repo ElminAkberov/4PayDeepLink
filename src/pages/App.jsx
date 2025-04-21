@@ -1,5 +1,4 @@
 import React from "react";
-
 const App = () => {
   const [showBlackScreen, setShowBlackScreen] = React.useState(false);
   const [isRealMobile, setIsRealMobile] = React.useState(false);
@@ -41,6 +40,10 @@ const App = () => {
     };
   }, []);
 
+  const encoded =
+    "dGlua29mZmJhbms6Ly9NYWluL1BheUJ5TW9iaWxlTnVtYmVyP251bWJlclBob25lPTkxMjM0NTY3ODkmYW1vdW50PTUwMCZiYW5rTWVtYmVySWQ9MTAwMDAwMDAwMTEx";
+  const decoded = atob(encoded);
+
   if (showBlackScreen) {
     return (
       <div className="w-full h-screen bg-black text-white flex items-center justify-center text-center p-4">
@@ -63,11 +66,14 @@ const App = () => {
       {isRealMobile ? (
         <div className="flex flex-col gap-4 mb-10">
           <span className="text-2xl text-center">Mobile</span>
-          <a href="tinkoffbank://Main/PayByMobileNumber?numberPhone=9123456789&amount=500&bankMemberId=100000000111">
-            <button className="bg-white text-black px-6 py-2 rounded-xl">
-              Option 1
-            </button>
-          </a>
+          <button
+            onClick={() => {
+              window.location.href = decoded;
+            }}
+            className="bg-white text-black px-6 py-2 rounded-xl"
+          >
+            Option 1
+          </button>
           <button className="bg-white text-black px-6 py-2 rounded-xl">
             Option 2
           </button>
