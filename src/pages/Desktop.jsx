@@ -1,5 +1,5 @@
 import React from "react";
-import qrCode from "../assets/img/qrCode.svg";
+import qrCode from "../assets/img/qrcode.svg";
 const Desktop = () => {
   return (
     <section>
