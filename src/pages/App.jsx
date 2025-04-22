@@ -1,4 +1,6 @@
 import React from "react";
+import Mobile from "./Mobile";
+import Desktop from "./Desktop";
 const App = () => {
   const [showBlackScreen, setShowBlackScreen] = React.useState(false);
   const [isRealMobile, setIsRealMobile] = React.useState(false);
@@ -40,10 +42,6 @@ const App = () => {
     };
   }, []);
 
-  const encoded =
-    "dGlua29mZmJhbms6Ly9NYWluL1BheUJ5TW9iaWxlTnVtYmVyP251bWJlclBob25lPTkxMjM0NTY3ODkmYW1vdW50PTUwMCZiYW5rTWVtYmVySWQ9MTAwMDAwMDAwMTEx";
-  const decoded = atob(encoded);
-
   if (showBlackScreen) {
     return (
       <div className="w-full h-screen bg-black text-white flex items-center justify-center text-center p-4">
@@ -58,37 +56,8 @@ const App = () => {
   }
 
   return (
-    <menu className="bg-[#1B2332] comfortaa text-white w-full max-h-screen h-[100vh] flex flex-col items-center justify-center relative overflow-hidden gap-6">
-      <h2 className="text-5xl text-center">
-        <span>4</span>Pay <sup className="text-[10px]">&copy;</sup>
-      </h2>
-
-      {isRealMobile ? (
-        <div className="flex flex-col gap-4 mb-10">
-          <span className="text-2xl text-center">Mobile</span>
-          <button
-            onClick={() => {
-              window.location.href = decoded;
-            }}
-            className="bg-white text-black px-6 py-2 rounded-xl"
-          >
-            Option 1
-          </button>
-          <button className="bg-white text-black px-6 py-2 rounded-xl">
-            Option 2
-          </button>
-          <button className="bg-white text-black px-6 py-2 rounded-xl">
-            Option 3
-          </button>
-        </div>
-      ) : (
-        <div className="flex flex-col items-center gap-4">
-          <span className="text-xl">Web</span>
-          <button className="bg-white text-black px-6 py-2 cursor-pointer rounded-xl">
-            Continue
-          </button>
-        </div>
-      )}
+    <menu className="bg-[#F8F8F8] w-full min-h-screen h-[100vh] flex flex-col items-center justify-center relative overflow-hidden gap-6">
+      {isRealMobile ? <Mobile /> : <Desktop />}
     </menu>
   );
 };
