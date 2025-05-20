@@ -2,13 +2,31 @@ import React from "react";
 import sberBank from "../assets/logo/SberBank.svg";
 import alfaBank from "../assets/logo/AlfaBanks.svg";
 import tBank from "../assets/logo/TBank.svg";
+import { useGetDeeplinkQuery } from "../features/api/apiSlice";
+import { useParams } from "react-router-dom";
 
 const Mobile = () => {
+  const { uuid } = useParams();
   const [selectedBank, setSelectedBank] = React.useState("");
+  const { data, error, isLoading } = useGetDeeplinkQuery(uuid, {
+    skip: !uuid,
+  });
+  const templateBase64 =
+    "dGlua29mZmJhbms6Ly9NYWluL1BheUJ5TW9iaWxlTnVtYmVyP251bWJlclBob25lPSZhbW91bnQ9JmJhbmtNZW1iZXJJZD0=";
 
-  const encoded =
-    "dGlua29mZmJhbms6Ly9NYWluL1BheUJ5TW9iaWxlTnVtYmVyP251bWJlclBob25lPTkxMjM0NTY3ODkmYW1vdW50PTUwMCZiYW5rTWVtYmVySWQ9MTAwMDAwMDAwMTEx";
-  const decoded = atob(encoded);
+  const template = atob(templateBase64);
+
+  function fillTemplate(template, data) {
+    const baseUri = template.split("?")[0];
+    let numberPhone = data?.sbp_phone_number || "";
+    const amount = data?.amount || "";
+    const bankMemberId = data?.bankMemberId || "";
+
+    const filled = `${baseUri}?numberPhone=${numberPhone}&amount=${amount}&bankMemberId=${bankMemberId}`;
+    return filled;
+  }
+
+  const filledUri = fillTemplate(template, data);
 
   const handleBankClick = (bank) => {
     setSelectedBank(bank);
@@ -51,12 +69,13 @@ const Mobile = () => {
       </div>
 
       <button
+        disabled={!data || error}
         onClick={() => {
           if (selectedBank == "tBank") {
-            window.location.href = decoded;
+            window.location.href = filledUri;
           }
         }}
-        className="bg-[#72E484] font-[500] py-2 rounded-[24px] text-sm mt-4"
+        className="bg-[#72E484] active:opacity-85 disabled:bg-[#ccc] disabled:pointer-events-none font-[500] py-2 rounded-[24px] text-sm mt-4"
       >
         Оплатить
       </button>
