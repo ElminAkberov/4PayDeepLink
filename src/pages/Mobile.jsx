@@ -20,12 +20,13 @@ const Mobile = () => {
     const baseUri = template.split("?")[0];
     let numberPhone = data?.sbp_phone_number || "";
     const amount = data?.amount || "";
-    const bankMemberId = data?.bankMemberId || "";
+    const bankMemberId = data?.bank?.bik || "";
 
-    const filled = `${baseUri}?numberPhone=${numberPhone}&amount=${amount}&bankMemberId=${bankMemberId}`;
+    const filled = `${baseUri}?numberPhone=${numberPhone}&amount=${amount}${
+      bankMemberId && `&bankMemberId=${bankMemberId}`
+    }`;
     return filled;
   }
-
   const filledUri = fillTemplate(template, data);
 
   const handleBankClick = (bank) => {
