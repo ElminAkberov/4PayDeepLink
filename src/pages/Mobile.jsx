@@ -3,10 +3,12 @@ import sberBank from "../assets/logo/SberBank.svg";
 import alfaBank from "../assets/logo/AlfaBanks.svg";
 import tBank from "../assets/logo/TBank.svg";
 import { useGetDeeplinkQuery } from "../features/api/apiSlice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Mobile = () => {
   const { uuid } = useParams();
+  const navigate = useNavigate();
+
   const [selectedBank, setSelectedBank] = React.useState("");
   const { data, error, isLoading } = useGetDeeplinkQuery(uuid, {
     skip: !uuid,
@@ -35,9 +37,9 @@ const Mobile = () => {
 
   return (
     <div className="text-black flex flex-col gap-4 mb-10">
-      <span className="text-2xl text-center text-[18px] mb-3">
+      <h3 className="text-2xl text-center text-[18px] mb-3">
         Выберите Банк для оплаты
-      </span>
+      </h3>
 
       <div
         onClick={() => handleBankClick("sber")}
@@ -80,7 +82,12 @@ const Mobile = () => {
       >
         Оплатить
       </button>
-      <button className="border border-black font-[500] py-2 rounded-[24px] text-sm">
+      <button
+        onClick={() => {
+          navigate("/info", { state: { data: data, loading: isLoading } });
+        }}
+        className="border border-black font-[500] py-2 rounded-[24px] text-sm"
+      >
         Другой банк
       </button>
     </div>

@@ -5,11 +5,16 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
+import Info from "./pages/Info.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/:uuid?",
     element: <App />,
+  },
+  {
+    path: "/info",
+    element: <Info />,
   },
 ]);
 
