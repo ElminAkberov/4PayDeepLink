@@ -1,9 +1,11 @@
 import React from "react";
 import Mobile from "./Mobile";
 import Desktop from "./Desktop";
+
 const App = () => {
   const [showBlackScreen, setShowBlackScreen] = React.useState(false);
   const [isRealMobile, setIsRealMobile] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true); 
 
   React.useEffect(() => {
     const checkDevice = () => {
@@ -33,6 +35,8 @@ const App = () => {
       } else {
         setShowBlackScreen(false);
       }
+
+      setIsLoading(false);
     };
 
     checkDevice();
@@ -41,6 +45,10 @@ const App = () => {
       window.removeEventListener("resize", checkDevice);
     };
   }, []);
+
+  if (isLoading) {
+    return null; 
+  }
 
   if (showBlackScreen) {
     return (
