@@ -84,7 +84,9 @@ const Mobile = () => {
       </button>
       <button
         onClick={() => {
-          navigate("/info", { state: { data: data, loading: isLoading } });
+          navigate("/info", {
+            state: { data: data, loading: isLoading, uuid: uuid },
+          });
         }}
         className="border border-black font-[500] py-2 rounded-[24px] text-sm"
       >

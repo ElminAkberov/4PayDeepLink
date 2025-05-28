@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { TbCopy } from "react-icons/tb";
 
 const Info = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { data } = location.state || {};
+  const { data, uuid } = location.state || {};
   const [copiedMessage, setCopiedMessage] = useState("");
 
   const handleCopy = (text) => {
@@ -38,7 +39,9 @@ const Info = () => {
             <div className="flex items-center gap-x-2 justify-between">
               <span className="text-gray-600">Номер телефона СБП:</span>
               <div className="flex items-center gap-x-1">
-                <span className="font-bold">{data?.sbp_phone_number || "-"}</span>
+                <span className="font-bold">
+                  {data?.sbp_phone_number || "-"}
+                </span>
                 {data?.sbp_phone_number && (
                   <TbCopy
                     className="cursor-pointer text-gray-500 hover:text-black"
@@ -64,6 +67,14 @@ const Info = () => {
             </div>
           </div>
         </div>
+        <button
+          onClick={() => {
+            navigate(`/${uuid}`);
+          }}
+          className="bg-[#72E484] cursor-pointer w-full border-black font-[500] py-2 rounded-[24px] text-sm"
+        >
+          Hазад
+        </button>
       </div>
     </section>
   );
