@@ -16,9 +16,14 @@ const Mobile = () => {
     "dGlua29mZmJhbms6Ly9NYWluL1BheUJ5TW9iaWxlTnVtYmVyP251bWJlclBob25lPSZhbW91bnQ9JmJhbmtNZW1iZXJJZD0=";
   const cardTemplate64 =
     "dGlua29mZmJhbms6Ly9NYWluL1BheS9DMkM/dGFyZ2V0Q2FyZE51bWJlcj0mYW1vdW50PQ==";
-  const template = atob(templateBase64);
-  const cardtemplate = atob(cardTemplate64);
-  
+  const sber_a64 =
+    "YW5kcm9pZC1hcHA6Ly9ydS5zYmVyYmFua21vYmlsZS9hbmRyb2lkLWFwcC9ydS5zYmVyYmFua21vYmlsZS9wYXltZW50cy9wMnA/dHlwZT1jYXJkX251bWJlciZyZXF1aXNpdGVOdW1iZXI9";
+  const alfa_a64 = "YWxmYWJhbms6Ly9waG9uZV9iYW5rX3RyYW5zZmVycw==";
+  const sber_ios64 =
+    "c2JlcmJhbmtvbmxpbmU6Ly9zYmVyYmFua29ubGluZS8vcDJwdHJhbnNmZXI/dG89";
+  const alfa_ios64 =
+    "YWxmYWJhbms6Ly8vL2Rhc2hib2FyZC9waG9uZV9iYW5rX3RyYW5zZmVycw==";
+
   function fillTemplate(template, data) {
     let filled;
     const baseUri = template.split("?")[0];
@@ -36,14 +41,42 @@ const Mobile = () => {
     }
     return filled;
   }
-  const filledUri = fillTemplate(
-    data?.card_number ? cardtemplate : template,
-    data
-  );
-
   const handleBankClick = (bank) => {
     setSelectedBank(bank);
   };
+
+  const getTemplateByBank = (bank) => {
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    switch (bank) {
+      case "tBank":
+        return data?.card_number ? atob(cardTemplate64) : atob(templateBase64);
+      case "sber":
+        return isIOS ? atob(sber_ios64) : atob(sber_a64);
+      case "alfaBank":
+        return isIOS ? atob(alfa_ios64) : atob(alfa_a64);
+      default:
+        return "";
+    }
+  };
+
+  const getFilledUri = () => {
+    const template = getTemplateByBank(selectedBank);
+    if (!data) return "";
+
+    if (selectedBank === "sber") {
+      const requisiteNumber = data.card_number || data.sbp_phone_number || "";
+      return `${template}${requisiteNumber}`;
+    }
+
+    if (selectedBank === "alfaBank") {
+      return template;
+    }
+
+    return fillTemplate(template, data);
+  };
+
+  const filledUri = getFilledUri();
 
   return (
     <div className="text-black flex flex-col gap-4 mb-10">
@@ -82,9 +115,9 @@ const Mobile = () => {
       </div>
 
       <button
-        disabled={!data || error}
+        disabled={!data || error || !selectedBank}
         onClick={() => {
-          if (selectedBank == "tBank") {
+          if (filledUri) {
             window.location.href = filledUri;
           }
         }}
